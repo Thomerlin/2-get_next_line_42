@@ -55,7 +55,7 @@ int     read_buf(int fd, int *result, char **line, char **buf)
         *line = NULL;
         return (0);
     }
-    if ((*result = read(fd, *buf, BUFFER_SIZE == -1)
+    if ((*result = read(fd, *buf, BUFFER_SIZE == -1)))
     {
         free(*line);
         *line = NULL;
