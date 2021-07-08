@@ -8,9 +8,9 @@ char    *write_beginning(char *buf)
 
     i = 0;
     len_buf = ft_strlen(buf, '\n');
-    if (!(bgn = malloc((sizeof(char) * (len_buf + 1)))))
+    if (!(bgn = malloc(sizeof(char) * (len_buf + 1))))
         return (NULL);
-    while (len_buf > i)
+    while (i < len_buf)
     {
         bgn[i] = buf[i];
         i++;
@@ -49,13 +49,13 @@ char    *write_end(char **line, char *buf, int *end)
 
 int     read_buf(int fd, int *result, char **line, char **buf)
 {
-    if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1))
+    if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))
     {
         free(*line);
         *line = NULL;
         return (0);
     }
-    if (!((*result = read(fd, *buf, BUFFER_SIZE)) == -1))
+    if ((*result = read(fd, *buf, BUFFER_SIZE == -1)
     {
         free(*line);
         *line = NULL;
@@ -63,7 +63,7 @@ int     read_buf(int fd, int *result, char **line, char **buf)
         return (0);
     }
     *(*buf + *result) = '\0';
-    while (!((ft_strchr(*buf, '\n')) && *result > 0))
+    while (!(ft_strchr(*buf, '\n')) && *result > 0)
     {
         if (!(*line = ft_strjoin(*line, *buf)))
             return (0);
