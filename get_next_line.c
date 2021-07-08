@@ -8,14 +8,14 @@ char    *write_beginning(char *buf)
 
     i = 0;
     len_buf = ft_strlen(buf, '\n');
-    if ((head = malloc(sizeof(char) * (len_buf + 1) == NULL)))
+    if ((bgn = malloc((sizeof(char) * (len_buf + 1)))) == NULL)
         return (NULL);
     while (len_buf > i)
     {
         bgn[i] = buf[i];
         i++;
     }
-    bgn[i] = NULL;
+    bgn[i] = '\0';
     return (bgn);
 }
 
@@ -27,7 +27,7 @@ char    *write_end(char **line, char *buf, int *end)
     if ((bgn = write_beginning(buf)) == NULL)
     {
         free(*line);
-        *line = NULL;
+        *line = '\0';
         free(buf);
         return (NULL);
     }
@@ -40,11 +40,11 @@ char    *write_end(char **line, char *buf, int *end)
     if ((*line = ft_strjoin(*line, bgn)) == NULL)
     {
         free(*line);
-        *line = NULL;
+        *line = '\0';
         return (NULL);
     }
     *end = 1;
-    return (dest)
+    return (dest);
 }
 
 int     read_buf(int fd, int *result, char **line, char **buf)
@@ -52,24 +52,24 @@ int     read_buf(int fd, int *result, char **line, char **buf)
     if ((*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1) == NULL)
     {
         free(*line);
-        *line = NULL;
+        *line = '\0';
         return (NULL);
     }
     if (((*result = read(fd, *buf, BUFFER_SIZE)) == -1) == NULL)
     {
         free(*line);
-        *line = NULL;
+        *line = '\0';
         free(*buf);
         return (NULL);
     }
-    *(*buf + *result) = NULL;
+    *(*buf + *result) = '\0';
     while (((ft_strchr(*buf, '\n')) && *result > 0) == NULL)
     {
         if ((*line = ft_strjoin(*line, *buf)) == NULL)
             return (0);
         if ((*result = read(fd, *buf, BUFFER_SIZE)) == NULL)
             return (1);
-        *(*buf + *result) = NULL;
+        *(*buf + *result) = '\0';
     }
     return (2);
 }
@@ -96,9 +96,9 @@ int     get_next_line(int fd, char **line)
     char        *bf;
     int         res;
 
-    if (fd < 0 || BFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char)) == NULL))
+    if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char)) == NULL))
         return (-1);
-    **line = NULL;
+    **line = '\0';
     if (is_end)
     {
         if ((res = process_end(line, &end, &is_end)) == NULL)
