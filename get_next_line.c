@@ -78,7 +78,7 @@ int     process_end(char **line, char **end, int *is_end)
 {
     if (ft_strchr(*end, '\n'))
     {
-        if (!(*end = write_end(*line, *end, is_end)))
+        if (!(*end = write_end(line, *end, is_end)))
             return (0);
         return (1);
     }
