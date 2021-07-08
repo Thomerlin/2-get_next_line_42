@@ -1,86 +1,119 @@
 #include "get_next_line.h"
 
-char	*ft_get_the_line(char *stock)
+char	*write_tail(char **line, char *buf, int *is_tail)
 {
-	char	*line;
-	int		i;
-	int		len;
+	char	*head;
+	char	*dest;
 
-	i = 0;
-	line = NULL;
-	while (stock[i] != '\n' && stock[i] != '\0')
-		i++;
-	len = i;
-	line = (char *)malloc(sizeof(char) * (i + 1));
-	if (!line)
+	if (!(head = write_head(buf)))
+	{
+		free(*line);
+		*line = NULL;
+		free(buf);
 		return (NULL);
-	i = 0;
-	while (stock[i] && i < len)
-	{
-		line[i] = stock[i];
-		i++;
 	}
-	line[i] = '\0';
-	return (line);
+	if (!(*line = ft_strjoin(*line, head)))
+	{
+		free(buf);
+		return (NULL);
+	}
+	free(head);
+	if (!(dest = ft_strdup(buf)))
+	{
+		free(*line);
+		*line = NULL;
+		return (NULL);
+	}
+	*is_tail = 1;
+	return (dest);
 }
 
-void	ft_get_the_spare(char *buffer)
+char	*write_head(char *buf)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	char	*head;
+	size_t	lenbuf;
 
 	i = 0;
-	while (buffer[i] != '\n')
-		i++;
-	i = i + 1;
-	j = 0;
-	while (i < BUFFER_SIZE)
+	lenbuf = ft_strlen(buf, '\n');
+	if (!(head = malloc(sizeof(char) * (lenbuf + 1))))
+		return (NULL);
+	while (i < lenbuf)
 	{
-		buffer[j] = buffer[i];
+		head[i] = buf[i];
 		i++;
-		j++;
 	}
-	buffer[j] = '\0';
+	head[i] = '\0';
+	return (head);
 }
 
-int	ft_stopEOF_or_giveLine(int ret, char **line, char *stock, char *buffer)
+int		read_buf(int fd, int *result, char **line, char **buf)
 {
-	if (ret == 0)
+	if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
 	{
-		*line = ft_get_the_line(stock);
-		free(stock);
+		free(*line);
+		*line = NULL;
 		return (0);
 	}
-	else
+	if ((*result = read(fd, *buf, BUFFER_SIZE)) == -1)
 	{
-		*line = ft_get_the_line(stock);
-		free(stock);
-		ft_get_the_spare(buffer);
-		return (1);
+		free(*line);
+		*line = NULL;
+		free(*buf);
+		return (0);
 	}
+	*(*buf + *result) = '\0';
+	while (!(ft_strchr(*buf, '\n')) && *result > 0)
+	{
+		if (!(*line = ft_strjoin(*line, *buf)))
+			return (0);
+		if (!(*result = read(fd, *buf, BUFFER_SIZE)))
+			return (1);
+		*(*buf + *result) = '\0';
+	}
+	return (2);
 }
 
-int	get_next_line(int fd, char **line)
+int		process_tail(char **line, char **tail, int *is_tail)
 {
-	static char	buffer[BUFFER_SIZE + 1];
-	char		*stock;
-	int			ret;
-
-	stock = NULL;
-	if ((read(fd, buffer, 0) == -1) || !line || BUFFER_SIZE <= 0)
-		return (-1);
-	ret = 1;
-	stock = ft_strjoin(stock, buffer);
-	while (ft_strchr(stock, '\n') == NULL && ret > 0)
+	if (ft_strchr(*tail, '\n'))
 	{
-		ret = read(fd, buffer, BUFFER_SIZE);
-		if (ret < 0)
-		{
-			free(stock);
-			return (-1);
-		}
-		buffer[ret] = '\0';
-		stock = ft_strjoin(stock, buffer);
+		if (!(*tail = write_tail(line, *tail, is_tail)))
+			return (0);
+		return (1);
 	}
-	return (ft_stopEOF_or_giveLine(ret, line, stock, buffer));
+	if (!(*line = ft_strjoin(*line, *tail)))
+		return (0);
+	free(*tail);
+	*is_tail = 0;
+	return (2);
+}
+
+int		get_next_line(int fd, char **line)
+{
+	char		*buf;
+	static char	*tail;
+	static int	is_tail;
+	int			result;
+
+	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
+		return (-1);
+	**line = '\0';
+	if (is_tail)
+	{
+		if (!(result = process_tail(line, &tail, &is_tail)))
+			return (-1);
+		if (result == 1)
+			return (1);
+	}
+	if (!(read_buf(fd, &result, line, &buf)))
+		return (-1);
+	if (ft_strchr(buf, '\n') && !(tail = write_tail(line, buf, &is_tail)))
+		return (-1);
+	if (!result)
+	{
+		free(buf);
+		return (0);
+	}
+	return (1);
 }

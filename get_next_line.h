@@ -1,22 +1,17 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1024
-# endif
-
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <fcntl.h>
-# include <stdlib.h>
 # include <unistd.h>
+# include <stdlib.h>
 
-char	*ft_strchr(char *s, int c);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strdup(char *s1);
-char	*ft_substr(char *s, unsigned int start, size_t len);
-size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
 int		get_next_line(int fd, char **line);
-size_t	ft_strlen(const char *str);
+size_t	ft_strlen(const char *s, const char c);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s);
+char	*ft_strjoin(char *s1, char *s2);
+char	*write_tail(char **line, char *buf, int *is_tail);
+int		read_buf(int fd, int *result, char **line, char **buf);
+int		process_tail(char **line, char **tail, int *is_tail);
+char	*write_head(char *buf);
 
 #endif
