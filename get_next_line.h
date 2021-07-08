@@ -1,28 +1,19 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-
-# include <unistd.h>
 # include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
-# define FD_SIZE 4096
+# define BUFF_SIZE 17
+# define MAX_FILES 4864
 
-typedef enum e_status
-{
-	ERROR = -1,
-	END_OF_FILE,
-	NEWLINE,
-}	t_status;
+int     get_next_line(int fd, char **line);
+void	ft_bzero(void *s, size_t n);
+size_t	ft_strlen(const char *s);
+char	*ft_strncpy(char *dst, const char *src, size_t len);
+char	*ft_strnew(size_t size);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	ft_strclr(char *s);
 
-int		get_next_line(int fd, char **line);
-
-size_t	ft_strlen(const char *str);
-
-char	*ft_strdup(const char *str);
-
-char	*ft_strjoin(const char *s1, const char *s2);
-
-char	*ft_strchr(const char *s, int c);
-
-char	*linedup(char *save, size_t end);
 
 #endif
