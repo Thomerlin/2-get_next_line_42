@@ -1,119 +1,106 @@
 #include "get_next_line.h"
 
-char	*write_tail(char **line, char *buf, int *is_tail)
+char    *write_beginning(char *buf)
 {
-	char	*head;
-	char	*dest;
+    char    *bgn;
+    size_t  len_buf;
+    size_t  i;
 
-	if (!(head = write_head(buf)))
-	{
-		free(*line);
-		*line = NULL;
-		free(buf);
-		return (NULL);
-	}
-	if (!(*line = ft_strjoin(*line, head)))
-	{
-		free(buf);
-		return (NULL);
-	}
-	free(head);
-	if (!(dest = ft_strdup(buf)))
-	{
-		free(*line);
-		*line = NULL;
-		return (NULL);
-	}
-	*is_tail = 1;
-	return (dest);
+    i = 0;
+    len_buf = ft_strlen(buf, '\n');
+    if ((head = malloc(sizeof(char) * (len_buf + 1) == NULL)))
+        return (NULL);
+    while (len_buf > i)
+    {
+        bgn[i] = buf[i];
+        i++;
+    }
+    bgn[i] = NULL;
+    return (bgn);
 }
 
-char	*write_head(char *buf)
+char    *write_end(char **line, char *buf, int *end)
 {
-	size_t	i;
-	char	*head;
-	size_t	lenbuf;
+    char *bgn;
+    char *dest;
 
-	i = 0;
-	lenbuf = ft_strlen(buf, '\n');
-	if (!(head = malloc(sizeof(char) * (lenbuf + 1))))
-		return (NULL);
-	while (i < lenbuf)
-	{
-		head[i] = buf[i];
-		i++;
-	}
-	head[i] = '\0';
-	return (head);
+    if ((((bgn = write_beginning(buf)) == NULL) || 
+    (dest = ft_strdup(buf)) == NULL) || 
+    (*line = ft_strjoin(*line, bgn)) == NULL)
+    {
+        free(*line);
+        *line = NULL;
+        free(buf);
+        return (NULL);
+    }
+    free(bgn);
+    *end = 1;
+    return (dest)
 }
 
-int		read_buf(int fd, int *result, char **line, char **buf)
+int     read_buf(int fd, int *result, char **line, char **buf)
 {
-	if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-	{
-		free(*line);
-		*line = NULL;
-		return (0);
-	}
-	if ((*result = read(fd, *buf, BUFFER_SIZE)) == -1)
-	{
-		free(*line);
-		*line = NULL;
-		free(*buf);
-		return (0);
-	}
-	*(*buf + *result) = '\0';
-	while (!(ft_strchr(*buf, '\n')) && *result > 0)
-	{
-		if (!(*line = ft_strjoin(*line, *buf)))
-			return (0);
-		if (!(*result = read(fd, *buf, BUFFER_SIZE)))
-			return (1);
-		*(*buf + *result) = '\0';
-	}
-	return (2);
+    if (((*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1) == NULL) || 
+    ((*result = read(fd, *buf, BUFFER_SIZE)) == -1) == NULL)
+    {
+        free(*line);
+        *line = NULL;
+        free(*buf);
+        return (NULL);
+    }
+    *(*buf + *result) = NULL;
+    while (((ft_strchr(*buf, '\n')) && *result > 0) == NULL)
+    {
+        if ((*line = ft_strjoin(*line, *buf)) == NULL)
+            return (0);
+        if ((*result = read(fd, *buf, BUFFER_SIZE)) == NULL)
+            return (1);
+        *(*buf + *result) = NULL;
+    }
+    return (2);
 }
 
-int		process_tail(char **line, char **tail, int *is_tail)
+int     process_end(char **line, char **end, int *is_end)
 {
-	if (ft_strchr(*tail, '\n'))
-	{
-		if (!(*tail = write_tail(line, *tail, is_tail)))
-			return (0);
-		return (1);
-	}
-	if (!(*line = ft_strjoin(*line, *tail)))
-		return (0);
-	free(*tail);
-	*is_tail = 0;
-	return (2);
+    if (ft_strchr(*end, '\n'))
+    {
+        if ((*line = ft_strjoin(*line, *end)) == NULL)
+            return (0);
+        return (1);
+    }
+    if ((*line = ft_strjoin(*line, *end)) == NULL)
+        return (0);
+    free(*end);
+    *is_end = 0;
+    return (2);
 }
 
-int		get_next_line(int fd, char **line)
+int     get_next_line(int fd, char **line)
 {
-	char		*buf;
-	static char	*tail;
-	static int	is_tail;
-	int			result;
+    static int  is_end;
+    static char *end;
+    char        *bf;
+    int         res;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
-		return (-1);
-	**line = '\0';
-	if (is_tail)
-	{
-		if (!(result = process_tail(line, &tail, &is_tail)))
-			return (-1);
-		if (result == 1)
-			return (1);
-	}
-	if (!(read_buf(fd, &result, line, &buf)))
-		return (-1);
-	if (ft_strchr(buf, '\n') && !(tail = write_tail(line, buf, &is_tail)))
-		return (-1);
-	if (!result)
-	{
-		free(buf);
-		return (0);
-	}
-	return (1);
+    if (fd < 0 || BFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char)) == NULL))
+        return (-1);
+    **line = NULL;
+    if (is_end)
+    {
+        if ((res = process_end(line, &end, &is_end)) == NULL)
+            return (-1);
+        if (res == 1)
+            return (1);
+    }
+    if ((read_buf(fd, &res, line, &bf)) == NULL)
+        return (-1);
+    if (ft_strchr(bf, '\n') && (end = write_end(line, bf, &is_end) == NULL))
+        return (-1);
+    if (res == NULL)
+    {
+        free(bf);
+        return (0);
+    }
+    return (1);
+
 }
