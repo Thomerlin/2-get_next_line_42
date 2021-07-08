@@ -49,7 +49,7 @@ char    *write_end(char **line, char *buf, int *end)
 
 int     read_buf(int fd, int *result, char **line, char **buf)
 {
-    if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))
+    if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
     {
         free(*line);
         *line = NULL;
