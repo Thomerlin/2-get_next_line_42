@@ -31,13 +31,13 @@ char    *write_end(char **line, char *buf, int *end)
         free(buf);
         return (NULL);
     }
-    if (!(dest = ft_strdup(buf)))
+    if (!(*line = ft_strjoin(*line, bgn)))
     {
         free(buf);
         return (NULL);
     }
     free(bgn);
-    if (!(*line = ft_strjoin(*line, bgn)))
+    if (!(dest = ft_strdup(buf)))
     {
         free(*line);
         *line = NULL;
@@ -78,7 +78,7 @@ int     process_end(char **line, char **end, int *is_end)
 {
     if (ft_strchr(*end, '\n'))
     {
-        if (!(*line = ft_strjoin(*line, *end)))
+        if (!(*end = write_end(*line, *end, is_end)))
             return (0);
         return (1);
     }
