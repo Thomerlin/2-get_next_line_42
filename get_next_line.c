@@ -8,7 +8,7 @@ char    *write_beginning(char *buf)
 
     i = 0;
     len_buf = ft_strlen(buf, '\n');
-    if ((bgn = malloc((sizeof(char) * (len_buf + 1)))) == NULL)
+    if (!(bgn = malloc((sizeof(char) * (len_buf + 1)))))
         return (NULL);
     while (len_buf > i)
     {
@@ -24,20 +24,20 @@ char    *write_end(char **line, char *buf, int *end)
     char *bgn;
     char *dest;
 
-    if ((bgn = write_beginning(buf)) == NULL)
+    if (!(bgn = write_beginning(buf)))
     {
         free(*line);
         *line = '\0';
         free(buf);
         return (NULL);
     }
-    if ((dest = ft_strdup(buf)) == NULL)
+    if (!(dest = ft_strdup(buf)))
     {
         free(buf);
         return (NULL);
     }
     free(bgn);
-    if ((*line = ft_strjoin(*line, bgn)) == NULL)
+    if (!(*line = ft_strjoin(*line, bgn)))
     {
         free(*line);
         *line = '\0';
@@ -49,25 +49,25 @@ char    *write_end(char **line, char *buf, int *end)
 
 int     read_buf(int fd, int *result, char **line, char **buf)
 {
-    if ((*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1) == NULL)
+    if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1))
     {
         free(*line);
         *line = '\0';
-        return (NULL);
+        return (0);
     }
-    if (((*result = read(fd, *buf, BUFFER_SIZE)) == -1) == NULL)
+    if (!((*result = read(fd, *buf, BUFFER_SIZE)) == -1))
     {
         free(*line);
         *line = '\0';
         free(*buf);
-        return (NULL);
+        return (0);
     }
     *(*buf + *result) = '\0';
-    while (((ft_strchr(*buf, '\n')) && *result > 0) == NULL)
+    while (!((ft_strchr(*buf, '\n')) && *result > 0))
     {
-        if ((*line = ft_strjoin(*line, *buf)) == NULL)
+        if (!(*line = ft_strjoin(*line, *buf)))
             return (0);
-        if ((*result = read(fd, *buf, BUFFER_SIZE)) == NULL)
+        if (!(*result = read(fd, *buf, BUFFER_SIZE)))
             return (1);
         *(*buf + *result) = '\0';
     }
@@ -78,11 +78,11 @@ int     process_end(char **line, char **end, int *is_end)
 {
     if (ft_strchr(*end, '\n'))
     {
-        if ((*line = ft_strjoin(*line, *end)) == NULL)
+        if (!(*line = ft_strjoin(*line, *end)))
             return (0);
         return (1);
     }
-    if ((*line = ft_strjoin(*line, *end)) == NULL)
+    if (!(*line = ft_strjoin(*line, *end)))
         return (0);
     free(*end);
     *is_end = 0;
@@ -96,21 +96,21 @@ int     get_next_line(int fd, char **line)
     char        *bf;
     int         res;
 
-    if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char)) == NULL))
+    if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
         return (-1);
     **line = '\0';
     if (is_end)
     {
-        if ((res = process_end(line, &end, &is_end)) == NULL)
+        if (!(res = process_end(line, &end, &is_end)))
             return (-1);
         if (res == 1)
             return (1);
     }
-    if ((read_buf(fd, &res, line, &bf)) == NULL)
+    if (!(read_buf(fd, &res, line, &bf)))
         return (-1);
-    if (ft_strchr(bf, '\n') && (end = write_end(line, bf, &is_end) == NULL))
+    if (ft_strchr(bf, '\n') && !(end = write_end(line, bf, &is_end)))
         return (-1);
-    if (res == NULL)
+    if (!res)
     {
         free(bf);
         return (0);
