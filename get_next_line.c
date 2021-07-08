@@ -1,79 +1,86 @@
 #include "get_next_line.h"
 
-char	*ft_save_the_next(char *s)
+char	*ft_get_the_line(char *stock)
 {
+	char	*line;
 	int		i;
-	int		count;
-	char	*str;
+	int		len;
 
 	i = 0;
-	count = 0;
-	while (s[i] && s[i] != '\n')
+	line = NULL;
+	while (stock[i] != '\n' && stock[i] != '\0')
 		i++;
-	if (!s[i])
+	len = i;
+	line = (char *)malloc(sizeof(char) * (i + 1));
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (stock[i] && i < len)
 	{
-		free(s);
-		return (0);
+		line[i] = stock[i];
+		i++;
 	}
-	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!str)
-		return (0);
-	i++;
-	while (s[i])
-		str[count++] = s[i++];
-	str[count] = '\0';
-	free(s);
-	return (str);
+	line[i] = '\0';
+	return (line);
 }
 
-char	*ft_line(char *s)
+void	ft_get_the_spare(char *buffer)
 {
-	int		i;
-	char	*str;
+	int	i;
+	int	j;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] && s[i] != '\n')
+	while (buffer[i] != '\n')
 		i++;
-	str = malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (s[i] && s[i] != '\n')
+	i = i + 1;
+	j = 0;
+	while (i < BUFFER_SIZE)
 	{
-		str[i] = s[i];
+		buffer[j] = buffer[i];
 		i++;
+		j++;
 	}
-	str[i] = '\0';
-	return (str);
+	buffer[j] = '\0';
+}
+
+int	ft_stopEOF_or_giveLine(int ret, char **line, char *stock, char *buffer)
+{
+	if (ret == 0)
+	{
+		*line = ft_get_the_line(stock);
+		free(stock);
+		return (0);
+	}
+	else
+	{
+		*line = ft_get_the_line(stock);
+		free(stock);
+		ft_get_the_spare(buffer);
+		return (1);
+	}
 }
 
 int	get_next_line(int fd, char **line)
 {
-	char		*buff;
-	static char	*save;
-	int			count;
+	static char	buffer[BUFFER_SIZE + 1];
+	char		*stock;
+	int			ret;
 
-	buff = ft_verific_buff(fd, line);
-	if (!buff)
+	stock = NULL;
+	if ((read(fd, buffer, 0) == -1) || !line || BUFFER_SIZE <= 0)
 		return (-1);
-	count = 1;
-	while (ft_verific_newline(save) != 1 && count != 0)
+	ret = 1;
+	stock = ft_strjoin(stock, buffer);
+	while (ft_strchr(stock, '\n') == NULL && ret > 0)
 	{
-		count = read(fd, buff, BUFFER_SIZE);
-		if (count == -1)
+		ret = read(fd, buffer, BUFFER_SIZE);
+		if (ret < 0)
 		{
-			free(buff);
+			free(stock);
 			return (-1);
 		}
-		buff[count] = '\0';
-		save = ft_strjoin(save, buff);
+		buffer[ret] = '\0';
+		stock = ft_strjoin(stock, buffer);
 	}
-	free(buff);
-	*line = ft_line(save);
-	save = ft_save_the_next(save);
-	if (count == 0)
-		return (0);
-	return (1);
+	return (ft_stopEOF_or_giveLine(ret, line, stock, buffer));
 }
