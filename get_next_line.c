@@ -24,24 +24,38 @@ char    *write_end(char **line, char *buf, int *end)
     char *bgn;
     char *dest;
 
-    if ((((bgn = write_beginning(buf)) == NULL) || 
-    (dest = ft_strdup(buf)) == NULL) || 
-    (*line = ft_strjoin(*line, bgn)) == NULL)
+    if ((bgn = write_beginning(buf)) == NULL)
     {
         free(*line);
         *line = NULL;
         free(buf);
         return (NULL);
     }
+    if ((dest = ft_strdup(buf)) == NULL)
+    {
+        free(buf);
+        return (NULL);
+    }
     free(bgn);
+    if ((*line = ft_strjoin(*line, bgn)) == NULL)
+    {
+        free(*line);
+        *line = NULL;
+        return (NULL);
+    }
     *end = 1;
     return (dest)
 }
 
 int     read_buf(int fd, int *result, char **line, char **buf)
 {
-    if (((*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1) == NULL) || 
-    ((*result = read(fd, *buf, BUFFER_SIZE)) == -1) == NULL)
+    if ((*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1) == NULL)
+    {
+        free(*line);
+        *line = NULL;
+        return (NULL);
+    }
+    if (((*result = read(fd, *buf, BUFFER_SIZE)) == -1) == NULL)
     {
         free(*line);
         *line = NULL;
