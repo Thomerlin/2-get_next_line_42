@@ -27,7 +27,7 @@ char    *write_end(char **line, char *buf, int *end)
     if (!(bgn = write_beginning(buf)))
     {
         free(*line);
-        *line = '\0';
+        *line = NULL;
         free(buf);
         return (NULL);
     }
@@ -40,7 +40,7 @@ char    *write_end(char **line, char *buf, int *end)
     if (!(*line = ft_strjoin(*line, bgn)))
     {
         free(*line);
-        *line = '\0';
+        *line = NULL;
         return (NULL);
     }
     *end = 1;
@@ -52,13 +52,13 @@ int     read_buf(int fd, int *result, char **line, char **buf)
     if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE)) + 1))
     {
         free(*line);
-        *line = '\0';
+        *line = NULL;
         return (0);
     }
     if (!((*result = read(fd, *buf, BUFFER_SIZE)) == -1))
     {
         free(*line);
-        *line = '\0';
+        *line = NULL;
         free(*buf);
         return (0);
     }
