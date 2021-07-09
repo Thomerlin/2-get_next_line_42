@@ -107,7 +107,7 @@ int	get_next_line(int fd, char **line)
 		if (res == 1)
 			return (1);
 	}
-	if (!(read_buf(fd, &res, line, &buff)) || ft_strchr(buff, '\n') && !(end = write_end(line, buff, &is_end)))
+	if (!(read_buf(fd, &res, line, &buff)) || (ft_strchr(buff, '\n') && !(end = write_end(line, buff, &is_end))))
 		return (-1);
 	if (!res)
 	{
