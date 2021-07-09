@@ -1,63 +1,83 @@
 #include "get_next_line.h"
 
-char	*ft_strchr(const char *s, int c)
+size_t	ft_strlen(const char *s)
 {
-	unsigned char	conv_c;
-
-	conv_c = (unsigned char)c;
-	while (*s)
-	{
-		if (*s == conv_c)
-			return ((char *)s);
-		s++;
-	}
-	if (conv_c == *s)
-		return ((char *)s);
-	return (NULL);
-}
-
-char	*ft_strdup(const char *src)
-{
-	char	*copy;
-	int		size;
-
-	size = ft_strlen(src) + 1;
-	copy = (char *)malloc(size);
-	if (copy != 0)
-	{
-		ft_strlcpy(copy, src, size);
-		return (copy);
-	}
-	return (NULL);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	size_t	len;
-	size_t	i;
-	char	*result;
-
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	result = malloc(len + 1);
-	if (result == NULL)
-		return (NULL);
-	i = 0;
-	while (*s1)
-		result[i++] = *s1++;
-	while (*s2)
-		result[i++] = *s2++;
-	result[i] = '\0';
-	return (result);
-}
-
-size_t	ft_strlen(const char *s, const char c)
-{
-	size_t i;
+	int	i;
 
 	i = 0;
-	while (s[i] != c)
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	char	*d;
+	char	*s;
+
+	d = (char *)dst;
+	s = (char *)src;
+	if (dst == src)
+		return (dst);
+	if (s < d)
+	{
+		while (len--)
+			*(d + len) = *(s + len);
+		return (dst);
+	}
+	while (len--)
+		*d++ = *s++;
+	return (dst);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	s1_len;
+	size_t	s2_len;
+	size_t	stot_len;
+	char	*rtn;
+
+	if (!s1 && !s2)
+		return (0);
+	s1_len = ft_strlen((char *)s1);
+	s2_len = ft_strlen((char *)s2);
+	stot_len = s1_len + s2_len + 1;
+	rtn = malloc(sizeof(char) * stot_len);
+	if (!rtn)
+		return (0);
+	ft_memmove(rtn, s1, s1_len);
+	ft_memmove(rtn + s1_len, s2, s2_len);
+	rtn[stot_len - 1] = '\0';
+	free((char *)s1);
+	return (rtn);
+}
+
+int	verific_newline(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*verific_buff(int fd, char **line)
+{
+	char	*buff;
+
+	if (fd < 0 || !line || BUFFER_SIZE <= 0)
+		return (NULL);
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buff)
+		return (NULL);
+	return (buff);
 }
