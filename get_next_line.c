@@ -97,16 +97,14 @@ int	get_next_line(int fd, char **line)
 	char		*buf;
 	int			res;
 
-	*line = malloc(sizeof(char));
-	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line))
+	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
 		return (-1);
 	**line = '\0';
 	if (is_end)
 	{
-		res = process_end(line, &end, &is_end);
-		if (!res)
+		if (!process_end(line, &end, &is_end))
 			return (-1);
-		if (res == 1)
+		if (process_end(line, &end, &is_end) == 1)
 			return (1);
 	}
 	if (!(read_buf(fd, &res, line, &buf)) || (ft_strchr(buf, '\n') && !(write_end(line, buf, &is_end))))
