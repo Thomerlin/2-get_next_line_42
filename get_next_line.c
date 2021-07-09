@@ -67,7 +67,7 @@ int		read_buf(int fd, int *result, char **line, char **buf)
 	{
 		if ((*line = ft_strjoin(*line, *buf)) == NULL)
 			return (0);
-		if (!(*result = read(fd, *buf, BUFFER_SIZE)))
+		if ((*result = read(fd, *buf, BUFFER_SIZE)) == '\0')
 			return (1);
 		*(*buf + *result) = '\0';
 	}
@@ -101,12 +101,12 @@ int				get_next_line(int fd, char **line)
 	**line = '\0';
 	if (is_end)
 	{
-		if (!(res = process_end(line, &end, &is_end)))
+		if ((res = process_end(line, &end, &is_end)) == '\0')
 			return (-1);
 		if (res == 1)
 			return (1);
 	}
-	if (!(read_buf(fd, &res, line, &bf)))
+	if ((read_buf(fd, &res, line, &bf)) == '\0')
 		return (-1);
 	if (ft_strchr(bf, '\n') && (end = write_end(line, bf, &is_end)) == NULL)
 		return (-1);
