@@ -1,12 +1,12 @@
 #include "get_next_line.h"
 
-char	*save_next(char *s)
+char	*ft_save_the_next(char *s)
 {
-	size_t	i;
-	size_t	count;
+	int		i;
+	int		count;
 	char	*str;
 
-	i = 0; 
+	i = 0;
 	count = 0;
 	while (s[i] && s[i] != '\n')
 		i++;
@@ -26,7 +26,7 @@ char	*save_next(char *s)
 	return (str);
 }
 
-char *get_line(char *s)
+char	*ft_line(char *s)
 {
 	int		i;
 	char	*str;
@@ -39,7 +39,7 @@ char *get_line(char *s)
 	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (0);
-	i = 0;	
+	i = 0;
 	while (s[i] && s[i] != '\n')
 	{
 		str[i] = s[i];
@@ -51,29 +51,29 @@ char *get_line(char *s)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*save;
 	char		*buff;
-	int			i;
+	static char	*save;
+	int			count;
 
-	buff = verific_buff(fd, line);
-	if(!buff)
+	buff = ft_verific_buff(fd, line);
+	if (!buff)
 		return (-1);
-	i = 1;
-	while (verific_newline(save) != 1 && i != 0)
+	count = 1;
+	while (ft_verific_newline(save) != 1 && count != 0)
 	{
-		i = read(fd, buff, BUFFER_SIZE);
-		if (i == -1)
+		count = read(fd, buff, BUFFER_SIZE);
+		if (count == -1)
 		{
 			free(buff);
 			return (-1);
 		}
-		buff[i] = '\0';
+		buff[count] = '\0';
 		save = ft_strjoin(save, buff);
 	}
 	free(buff);
-	*line = get_line(save);
-	save = save_next(save);
-	if (i == 0)
+	*line = ft_line(save);
+	save = ft_save_the_next(save);
+	if (count == 0)
 		return (0);
 	return (1);
 }

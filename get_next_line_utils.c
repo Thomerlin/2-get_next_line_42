@@ -54,7 +54,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (rtn);
 }
 
-int	verific_newline(char *str)
+int	ft_verific_newline(char *str)
 {
 	int	i;
 
@@ -70,7 +70,7 @@ int	verific_newline(char *str)
 	return (0);
 }
 
-char	*verific_buff(int fd, char **line)
+char	*ft_verific_buff(int fd, char **line)
 {
 	char	*buff;
 
