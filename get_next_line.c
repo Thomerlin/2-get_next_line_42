@@ -53,20 +53,14 @@ char	*write_end(char **line, char *buf, int *end)
 	return (dest);
 }
 
-int		read_buf(int fd, int *result, char **line, char **buf)
+int	read_buf(int fd, int *result, char **line, char **buf)
 {
 	size_t	i;
 
 	i = 0;
 	buf[i] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (buf[i] == NULL)
-	{
-		free(line[i]);
-		line[i] = NULL;
-		return (0);
-	}
 	result[i] = read(fd, buf[i], BUFFER_SIZE);
-	if (result[i] == -1)
+	if (buf[i] == NULL || result[i] == -1)
 	{
 		free(line[i]);
 		line[i] = NULL;
@@ -85,11 +79,11 @@ int		read_buf(int fd, int *result, char **line, char **buf)
 		*(buf[i] + result[i]) = '\0';
 	}
 	return (2);
-	}
+}
 
-int		process_end(char **line, char **end, int *is_end)
+int	process_end(char **line, char **end, int *is_end)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (ft_strchr(end[i], '\n'))
@@ -107,7 +101,7 @@ int		process_end(char **line, char **end, int *is_end)
 	return (2);
 }
 
-int				get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static int	is_end;
 	static char	*end;
