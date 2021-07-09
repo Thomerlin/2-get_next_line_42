@@ -1,79 +1,92 @@
 #include "get_next_line.h"
 
-char	*ft_save_the_next(char *s)
+static size_t	move_buffer(char buffer[])
 {
-	int		i;
-	int		count;
-	char	*str;
+	size_t	i;
+	size_t	j;
+	int		bytes_left;
 
 	i = 0;
-	count = 0;
-	while (s[i] && s[i] != '\n')
+	while (i < BUFFER_SIZE && buffer[i] != '\n')
 		i++;
-	if (!s[i])
+	if (i == BUFFER_SIZE)
+		bytes_left = 0;
+	else
+		bytes_left = BUFFER_SIZE - i - 1;
+	j = 0;
+	while (j < BUFFER_SIZE)
 	{
-		free(s);
-		return (0);
+		if (i < BUFFER_SIZE)
+			buffer[j++] = buffer[++i];
+		else
+			buffer[j++] = 0;
 	}
-	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!str)
-		return (0);
-	i++;
-	while (s[i])
-		str[count++] = s[i++];
-	str[count] = '\0';
-	free(s);
-	return (str);
+	return (bytes_left);
 }
 
-char	*ft_line(char *s)
+static char	*merge_buffer_n(char *dest, char *src, size_t n)
 {
-	int		i;
-	char	*str;
+	size_t	dest_len;
+	size_t	result_len;
+	char	*result;
 
+	dest_len = 0;
+	if (dest)
+		dest_len = ft_strlen(dest);
+	result_len = dest_len + n;
+	result = malloc(sizeof(char) * (result_len + 1));
+	if (!result)
+		return (NULL);
+	result[0] = '\0';
+	if (dest)
+		ft_strlcat(result, dest, dest_len + 1);
+	ft_strlcat(result, src, result_len + 1);
+	return (result);
+}
+
+static int	append_next_chunk(int fd, char **new_line, char *buffer)
+{
+	int			bytes_left;
+	int			i;
+	char		*merged_str;
+
+	bytes_left = move_buffer(buffer);
+	if (bytes_left == 0)
+		bytes_left = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_left == -1)
+		return (GNL_ERROR);
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] && s[i] != '\n')
+	while (i < bytes_left && buffer[i] != '\n')
 		i++;
-	str = malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (0);
-	i = 0;
-	while (s[i] && s[i] != '\n')
-	{
-		str[i] = s[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
+	merged_str = merge_buffer_n(*new_line, buffer, i);
+	if (!merged_str)
+		return (GNL_ERROR);
+	if (*new_line)
+		free(*new_line);
+	*new_line = merged_str;
+	if (buffer[i] == '\n')
+		return (1);
+	if (bytes_left == 0)
+		return (GNL_END_OF_FILE);
+	return (0);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	char		*buff;
-	static char	*save;
-	int			count;
+	char		*new_line;
+	int			finished;
+	static char	buffer[BUFFER_SIZE + 1];
 
-	buff = ft_verific_buff(fd, line);
-	if (!buff)
-		return (-1);
-	count = 1;
-	while (ft_verific_newline(save) != 1 && count != 0)
+	new_line = NULL;
+	finished = 0;
+	while (!finished)
 	{
-		count = read(fd, buff, BUFFER_SIZE);
-		if (count == -1)
-		{
-			free(buff);
+		finished = append_next_chunk(fd, &new_line, buffer);
+		*line = new_line;
+		if (finished == GNL_END_OF_FILE)
+			return (0);
+		if (finished == GNL_ERROR)
 			return (-1);
-		}
-		buff[count] = '\0';
-		save = ft_strjoin(save, buff);
 	}
-	free(buff);
-	*line = ft_line(save);
-	save = ft_save_the_next(save);
-	if (count == 0)
-		return (0);
 	return (1);
 }
