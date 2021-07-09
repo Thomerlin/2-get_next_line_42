@@ -15,9 +15,9 @@ typedef enum e_status
 
 int		get_next_line(int fd, char **line);
 
-size_t	ft_strlen(const char *str);
+size_t	ft_strlen(const char *s);
 
-char	*ft_strdup(const char *str);
+char	*ft_strdup(const char *src);
 
 char	*ft_strjoin(const char *s1, const char *s2);
 

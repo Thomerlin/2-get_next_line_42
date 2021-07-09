@@ -1,31 +1,29 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(const char *s)
 {
-	const char	*end;
+	size_t	i;
 
-	end = str;
-	while (*end)
-		end++;
-	return (end - str);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-char	*ft_strdup(const char *str)
-{
-	char	*ret;
-	size_t	size;
-	size_t	offset;
 
-	size = ft_strlen(str);
-	ret = malloc(size + 1);
-	offset = 0;
-	while (str[offset])
+char	*ft_strdup(const char *src)
+{
+	char	*copy;
+	int		size;
+
+	size = ft_strlen(src) + 1;
+	copy = (char *)malloc(size);
+	if (copy != 0)
 	{
-		ret[offset] = str[offset];
-		offset++;
+		ft_strlcpy(copy, src, size);
+		return (copy);
 	}
-	ret[offset] = '\0';
-	return (ret);
+	return (NULL);
 }
 
 char	*ft_strjoin(const char *s1, const char *s2)
@@ -51,20 +49,17 @@ char	*ft_strjoin(const char *s1, const char *s2)
 
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned char	*s_u;
-	unsigned char	c_u;
+	unsigned char	conv_c;
 
-	if (s == NULL)
-		return (NULL);
-	s_u = (unsigned char *)s;
-	c_u = (unsigned char)c;
-	if (*s_u == c_u)
-		return ((char *)s_u);
-	while (*s_u++)
+	conv_c = (unsigned char)c;
+	while (*s)
 	{
-		if (*s_u == c_u)
-			return ((char *)s_u);
+		if (*s == conv_c)
+			return ((char *)s);
+		s++;
 	}
+	if (conv_c == *s)
+		return ((char *)s);
 	return (NULL);
 }
 
