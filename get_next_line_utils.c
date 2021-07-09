@@ -1,80 +1,63 @@
 #include "get_next_line.h"
 
-char		*ft_strchr(const char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	int i;
-	int j;
+	unsigned char	conv_c;
 
-	i = 0;
-	j = ft_strlen(s, '\0');
-	while (i <= j)
+	conv_c = (unsigned char)c;
+	while (*s)
 	{
-		if (s[i] == c)
-			return ((char *)s + i);
-		i++;
+		if (*s == conv_c)
+			return ((char *)s);
+		s++;
+	}
+	if (conv_c == *s)
+		return ((char *)s);
+	return (NULL);
+}
+
+char	*ft_strdup(const char *src)
+{
+	char	*copy;
+	int		size;
+
+	size = ft_strlen(src) + 1;
+	copy = (char *)malloc(size);
+	if (copy != 0)
+	{
+		ft_strlcpy(copy, src, size);
+		return (copy);
 	}
 	return (NULL);
 }
 
-char		*ft_strdup(const char *s)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	size_t	i;
-	char	*dest;
-	char	*tmp;
-
-	tmp = ft_strchr(s, '\n') + 1;
-	i = ft_strlen(tmp, '\0');
-	if (!(dest = malloc(sizeof(char) * (i + 1))))
-	{
-		free((char *)s);
-		return (NULL);
-	}
-	i = 0;
-	while (tmp[i] != '\0')
-	{
-		dest[i] = tmp[i];
-		i++;
-	}
-	dest[i] = '\0';
-	free((char *)s);
-	return (dest);
-}
-
-char		*ft_strjoin(char *s1, char *s2)
-{
-	char	*s3;
 	size_t	len;
 	size_t	i;
-	size_t	j;
+	char	*result;
 
-	len = ft_strlen(s1, '\0') + ft_strlen(s2, '\0');
-	i = 0;
-	j = 0;
-	if (!(s3 = malloc(sizeof(char) * (len + 1))))
-	{
-		free(s1);
-		s1 = NULL;
-		free(s2);
+	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	}
-	while (s1[i] != '\0')
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
-		s3[i++] = s2[j++];
-	s3[i] = '\0';
-	free(s1);
-	return (s3);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	result = malloc(len + 1);
+	if (result == NULL)
+		return (NULL);
+	i = 0;
+	while (*s1)
+		result[i++] = *s1++;
+	while (*s2)
+		result[i++] = *s2++;
+	result[i] = '\0';
+	return (result);
 }
 
-size_t		ft_strlen(const char *s, const char c)
+size_t	ft_strlen(const char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	while (s[i] != c)
+	while (s[i])
 		i++;
 	return (i);
 }
