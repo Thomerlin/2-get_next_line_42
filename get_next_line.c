@@ -120,8 +120,7 @@ int				get_next_line(int fd, char **line)
 	**line = '\0';
 	if (is_end)
 	{
-		res = process_end(line, &end, &is_end);
-		if (res == '\0')
+		if ((res = process_end(line, &end, &is_end)) == '\0')
 			return (-1);
 		if (res == 1)
 			return (1);
