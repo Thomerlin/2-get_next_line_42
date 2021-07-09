@@ -89,16 +89,21 @@ int		read_buf(int fd, int *result, char **line, char **buf)
 
 int		process_end(char **line, char **end, int *is_end)
 {
-	if (ft_strchr(*end, '\n'))
+	size_t i;
+
+	i = 0;
+	if (ft_strchr(end[i], '\n'))
 	{
-		if ((*end = write_end(line, *end, is_end)) == NULL)
+		end[i] = write_end(line, end[i], is_end);
+		if (end[i] == NULL)
 			return (0);
 		return (1);
 	}
-	if ((*line = ft_strjoin(*line, *end)) == NULL)
+	line[i] = ft_strjoin(line[i], end[i]);
+	if (line[i] == NULL)
 		return (0);
-	free(*end);
-	*is_end = 0;
+	free(end[i]);
+	is_end[i] = 0;
 	return (2);
 }
 
@@ -109,19 +114,22 @@ int				get_next_line(int fd, char **line)
 	char		*bf;
 	int			res;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char))) == NULL)
+	*line = malloc(sizeof(char));
+	if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || *line == NULL)
 		return (-1);
 	**line = '\0';
 	if (is_end)
 	{
-		if ((res = process_end(line, &end, &is_end)) == '\0')
+		res = process_end(line, &end, &is_end);
+		if (res == '\0')
 			return (-1);
 		if (res == 1)
 			return (1);
 	}
 	if ((read_buf(fd, &res, line, &bf)) == '\0')
 		return (-1);
-	if (ft_strchr(bf, '\n') && (end = write_end(line, bf, &is_end)) == NULL)
+	end = write_end(line, bf, &is_end);
+	if (ft_strchr(bf, '\n') && end == NULL)
 		return (-1);
 	if (res == '\0')
 	{
