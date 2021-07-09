@@ -55,27 +55,33 @@ char	*write_end(char **line, char *buf, int *end)
 
 int		read_buf(int fd, int *result, char **line, char **buf)
 {
-	if ((*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))) == NULL)
+	size_t	i;
+
+	i = 0;
+	buf[i] = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (buf[i] == NULL)
 	{
-		free(*line);
-		*line = NULL;
+		free(line[i]);
+		line[i] = NULL;
 		return (0);
 	}
-	if ((*result = read(fd, *buf, BUFFER_SIZE)) == -1)
+	result[i] = read(fd, buf[i], BUFFER_SIZE);
+	if (result[i] == -1)
 	{
-		free(*line);
-		*line = NULL;
-		free(*buf);
+		free(line[i]);
+		line[i] = NULL;
+		free(buf[i]);
 		return (0);
 	}
-	*(*buf + *result) = '\0';
-	while ((ft_strchr(*buf, '\n')) == NULL && *result > 0)
+	*(buf[i] + result[i]) = '\0';
+	while ((ft_strchr(buf[i], '\n')) == NULL && result[i] > 0)
 	{
-		if ((*line = ft_strjoin(*line, *buf)) == NULL)
+		line[i] = ft_strjoin(line[i], buf[i]);
+		if (line[i] == NULL)
 			return (0);
-		if ((*result = read(fd, *buf, BUFFER_SIZE)) == '\0')
+		if ((result[i] == '\0')
 			return (1);
-		*(*buf + *result) = '\0';
+		*(buf[i] + result[i]) = '\0';
 	}
 	return (2);
 	}
