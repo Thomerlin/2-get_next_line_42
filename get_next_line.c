@@ -97,7 +97,8 @@ int	get_next_line(int fd, char **line)
 	char		*bf;
 	int			res;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
+	*line = malloc(sizeof(char));
+	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line))
 		return (-1);
 	**line = '\0';
 	if (is_end != '\0')
