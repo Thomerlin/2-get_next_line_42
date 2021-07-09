@@ -29,16 +29,11 @@ char	*write_end(char **line, char *buf, int *end)
 	i = 0;
 	bgn = write_beginning(buf);
 	dest = ft_strdup(buf);
-	if (bgn == NULL || dest == NULL)
+	line[i] = ft_strjoin(line[i], bgn);
+	if (bgn == NULL || dest == NULL || line[i] == NULL)
 	{
 		free(line[i]);
 		line[i] = NULL;
-		free(buf);
-		return (NULL);
-	}
-	line[i] = ft_strjoin(line[i], bgn);
-	if (line[i] == NULL)
-	{
 		free(buf);
 		return (NULL);
 	}
