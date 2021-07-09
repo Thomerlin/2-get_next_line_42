@@ -68,7 +68,7 @@ int	get_next_line(int fd, char **line)
 			return (-1);
 		}
 		buff[i] = '\0';
-		save = ft_strjoin;
+		save = ft_strjoin(save, buff);
 	}
 	free(buff);
 	*line = get_line(save);
