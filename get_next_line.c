@@ -1,5 +1,14 @@
 #include "get_next_line.h"
 
+/*
+ * Searches the buffer for a newline character and moves all of the subsequent
+ * characteres to the beginning of the buffer, filling the end with nul
+ * characteres.
+ * Returns the amount of valid characters left, which can be 0 if the buffer
+ * was completely wiped out, BUFFER_SIZE, or
+ * any number in between.
+ * */
+
 static size_t	move_buffer(char buffer[])
 {
 	size_t	i;

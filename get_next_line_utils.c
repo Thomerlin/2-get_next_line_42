@@ -1,15 +1,5 @@
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
-{
-	size_t	len;
-
-	len = 0;
-	while (*str++)
-		len++;
-	return (len);
-}
-
 size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
 	size_t	i;
@@ -26,4 +16,14 @@ size_t	ft_strlcat(char *dest, const char *src, size_t size)
 	while (src[j++])
 		i++;
 	return (i);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	len;
+
+	len = 0;
+	while (*str++)
+		len++;
+	return (len);
 }
