@@ -8,7 +8,8 @@ char	*write_beginning(char *buf)
 
 	i = 0;
 	len_buf = ft_strlen(buf, '\n');
-	if ((bgn = malloc(sizeof(char) * (len_buf + 1))) == NULL)
+	bgn = malloc(sizeof(char) * (len_buf + 1));
+	if (bgn == NULL)
 		return (NULL);
 	while (i < len_buf)
 	{
@@ -23,27 +24,32 @@ char	*write_end(char **line, char *buf, int *end)
 {
 	char	*bgn;
 	char	*dest;
+	size_t	i;
 
-	if ((bgn = write_beginning(buf)) == NULL)
+	i = 0;
+	bgn = write_beginning(buf);
+	if (bgn == NULL)
 	{
-		free(*line);
-		*line = NULL;
+		free(line[i]);
+		line[i] = NULL;
 		free(buf);
 		return (NULL);
 	}
-	if ((*line = ft_strjoin(*line, bgn)) == NULL)
+	line[i] = ft_strjoin(line[i], bgn);
+	if (line[i] == NULL)
 	{
 		free(buf);
 		return (NULL);
 	}
 	free(bgn);
-	if ((dest = ft_strdup(buf)) == NULL)
+	dest = ft_strdup(buf);
+	if (dest == NULL)
 	{
-		free(*line);
-		*line = NULL;
+		free(line[i]);
+		line[i] = NULL;
 		return (NULL);
 	}
-	*end = 1;
+	end[i] = 1;
 	return (dest);
 }
 
