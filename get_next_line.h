@@ -1,22 +1,14 @@
-
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
 # include <unistd.h>
 # include <stdlib.h>
 
-size_t	ft_strlcat(char *dest, const char *src, size_t size);
-size_t	ft_strlen(const char *str);
-
-/**
- * Retrieves a string that ends with a newline charactere from the file
- * descriptor `fd` and make the pointer `line` point to it
- * */
-
-int		get_next_line(int fd, char **line);
-
-# define GNL_ERROR -1
-# define GNL_END_OF_LINE 1
-# define GNL_END_OF_FILE 2
+int			get_next_line(int fd, char **line);
+int			ft_verific_newline(char *str);
+size_t		ft_strlen(const char *str);
+void		*ft_memmove(void *dst, const void *src, size_t len);
+char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_verific_buff(int fd, char **line);
 
 #endif

@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
-        "functional": "cpp"
+        "functional": "cpp",
+        "get_next_line.h": "c"
     }
 }
