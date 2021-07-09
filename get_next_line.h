@@ -5,7 +5,7 @@
 # include <stdlib.h>
 
 int		get_next_line(int fd, char **line);
-size_t	ft_strlen(const char *s, const char c)
+size_t	ft_strlen(const char *s, const char c);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *src);
 char	*ft_strjoin(const char *s1, const char *s2);
