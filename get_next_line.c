@@ -28,7 +28,8 @@ char	*write_end(char **line, char *buf, int *end)
 
 	i = 0;
 	bgn = write_beginning(buf);
-	if (bgn == NULL)
+	dest = ft_strdup(buf);
+	if (bgn == NULL || dest == NULL)
 	{
 		free(line[i]);
 		line[i] = NULL;
@@ -42,13 +43,6 @@ char	*write_end(char **line, char *buf, int *end)
 		return (NULL);
 	}
 	free(bgn);
-	dest = ft_strdup(buf);
-	if (dest == NULL)
-	{
-		free(line[i]);
-		line[i] = NULL;
-		return (NULL);
-	}
 	end[i] = 1;
 	return (dest);
 }
