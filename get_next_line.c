@@ -94,7 +94,7 @@ int	get_next_line(int fd, char **line)
 {
 	static int	is_end;
 	static char	*end;
-	char		*buff;
+	char		*buf;
 	int			res;
 
 	*line = malloc(sizeof(char));
@@ -109,12 +109,12 @@ int	get_next_line(int fd, char **line)
 		if (res == 1)
 			return (1);
 	}
-	end = write_end(line, buff, &is_end);
-	if (!(read_buf(fd, &res, line, &buff)) || (ft_strchr(buff, '\n') && !(end)))
+	end = write_end(line, buf, &is_end);
+	if (!(read_buf(fd, &res, line, &buf)) || (ft_strchr(buf, '\n') && !(end)))
 		return (-1);
 	if (!res)
 	{
-		free(buff);
+		free(buf);
 		return (0);
 	}
 	return (1);
