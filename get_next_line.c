@@ -79,6 +79,7 @@ int		read_buf(int fd, int *result, char **line, char **buf)
 		line[i] = ft_strjoin(line[i], buf[i]);
 		if (line[i] == NULL)
 			return (0);
+		result[i] = read(fd, buf[i], BUFFER_SIZE);
 		if (result[i] == '\0')
 			return (1);
 		*(buf[i] + result[i]) = '\0';
