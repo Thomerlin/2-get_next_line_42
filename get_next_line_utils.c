@@ -10,25 +10,20 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t 	ft_strlcat(char *dest, const char *src, size_t size)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	size_t	dlen;
-	size_t	slen;
-	size_t	offset;
 	size_t	i;
+	size_t	j;
 
-	dlen = ft_strlen(dest);
-	slen = ft_strlen(src);
-	offset = dlen;
 	i = 0;
-	if (size <= dlen)
-		return (slen + size);
-	while (src[i] && offset != size - 1)
-	{
-		dest[offset] = src[i];
-		offset++;
+	while (dest[i] != '\0' && i < size)
 		i++;
-	}
-	dest[offset] = '\0';
-	return (dlen + slen);
+	j = 0;
+	while (src[j] != '\0' && i + 1 < size)
+		dest[i++] = src[j++];
+	if (size > i)
+		dest[i] = '\0';
+	while (src[j++])
+		i++;
+	return (i);
 }
