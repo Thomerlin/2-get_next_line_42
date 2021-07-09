@@ -5,10 +5,10 @@
 # include <stdlib.h>
 
 int		get_next_line(int fd, char **line);
-size_t	ft_strlen(const char *s, const char c);
+size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strdup(const char *src);
+char	*ft_strjoin(const char *s1, const char *s2);
 char	*write_beginning(char *buf);
 char	*write_end(char **line, char *buf, int *end);
 int		read_buf(int fd, int *result, char **line, char **buf);
