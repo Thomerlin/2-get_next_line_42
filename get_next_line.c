@@ -95,21 +95,20 @@ int	get_next_line(int fd, char **line)
 	static int	is_end;
 	static char	*end;
 	char		*buff;
-	int			res;
+	int			result;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
 		return (-1);
-	**line = '\0';
 	if (is_end)
 	{
-		if (!(res = process_end(line, &end, &is_end)))
+		if (!(result = process_end(line, &end, &is_end)))
 			return (-1);
-		if (res == 1)
+		if (result == 1)
 			return (1);
 	}
-	if (!(read_buf(fd, &res, line, &buff)) || (ft_strchr(buff, '\n') && !(end = write_end(line, buff, &is_end))))
+	if (!(read_buf(fd, &result, line, &buff)) || (ft_strchr(buff, '\n') && !(end = write_end(line, buff, &is_end))))
 		return (-1);
-	if (!res)
+	if (!result)
 	{
 		free(buff);
 		return (0);
