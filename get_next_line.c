@@ -24,20 +24,20 @@ char	*write_end(char **line, char *buf, int *end)
 	char	*bgn;
 	char	*dest;
 
-	if (!(bgn = write_beginning(buf)))
+	if ((bgn = write_beginning(buf)) == NULL)
 	{
 		free(*line);
 		*line = NULL;
 		free(buf);
 		return (NULL);
 	}
-	if (!(*line = ft_strjoin(*line, bgn)))
+	if ((*line = ft_strjoin(*line, bgn)) == NULL)
 	{
 		free(buf);
 		return (NULL);
 	}
 	free(bgn);
-	if (!(dest = ft_strdup(buf)))
+	if ((dest = ft_strdup(buf)) == NULL)
 	{
 		free(*line);
 		*line = NULL;
@@ -49,7 +49,7 @@ char	*write_end(char **line, char *buf, int *end)
 
 int		read_buf(int fd, int *result, char **line, char **buf)
 {
-	if (!(*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+	if ((*buf = malloc(sizeof(char) * (BUFFER_SIZE + 1))) == NULL)
 	{
 		free(*line);
 		*line = NULL;
@@ -63,11 +63,11 @@ int		read_buf(int fd, int *result, char **line, char **buf)
 		return (0);
 	}
 	*(*buf + *result) = '\0';
-	while (!(ft_strchr(*buf, '\n')) && *result > 0)
+	while ((ft_strchr(*buf, '\n')) == NULL && *result > 0)
 	{
-		if (!(*line = ft_strjoin(*line, *buf)))
+		if ((*line = ft_strjoin(*line, *buf)) == NULL)
 			return (0);
-		if (!(*result = read(fd, *buf, BUFFER_SIZE)))
+		if ((*result = read(fd, *buf, BUFFER_SIZE)) == NULL)
 			return (1);
 		*(*buf + *result) = '\0';
 	}
@@ -78,11 +78,11 @@ int		process_end(char **line, char **end, int *is_end)
 {
 	if (ft_strchr(*end, '\n'))
 	{
-		if (!(*end = write_end(line, *end, is_end)))
+		if ((*end = write_end(line, *end, is_end)) == NULL)
 			return (0);
 		return (1);
 	}
-	if (!(*line = ft_strjoin(*line, *end)))
+	if ((*line = ft_strjoin(*line, *end)) == NULL)
 		return (0);
 	free(*end);
 	*is_end = 0;
@@ -96,21 +96,21 @@ int				get_next_line(int fd, char **line)
 	char		*bf;
 	int			res;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || !line || !(*line = malloc(sizeof(char))))
+	if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || (*line = malloc(sizeof(char))) == NULL)
 		return (-1);
 	**line = '\0';
 	if (is_end)
 	{
-		if (!(res = process_end(line, &end, &is_end)))
+		if ((res = process_end(line, &end, &is_end)) == NULL)
 			return (-1);
 		if (res == 1)
 			return (1);
 	}
-	if (!(read_buf(fd, &res, line, &bf)))
+	if ((read_buf(fd, &res, line, &bf)) == NULL)
 		return (-1);
-	if (ft_strchr(bf, '\n') && !(end = write_end(line, bf, &is_end)))
+	if (ft_strchr(bf, '\n') && (end = write_end(line, bf, &is_end)) == NULL)
 		return (-1);
-	if (!res)
+	if (res == NULL)
 	{
 		free(bf);
 		return (0);
