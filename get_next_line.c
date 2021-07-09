@@ -101,7 +101,7 @@ int	get_next_line(int fd, char **line)
 	if (fd < 0 || BUFFER_SIZE < 1 || line == NULL || *line == NULL)
 		return (-1);
 	**line = '\0';
-	if (is_end != NULL)
+	if (is_end != '\0')
 	{
 		if ((res = process_end(line, &end, &is_end)) == '\0')
 			return (-1);
