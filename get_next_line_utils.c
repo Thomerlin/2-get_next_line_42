@@ -1,82 +1,81 @@
-#include "get_next_line.h"
-
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
-	while (s[i])
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
 		i++;
 	return (i);
 }
 
-
-char	*ft_strdup(const char *src)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*copy;
-	int		size;
+	char	*d;
+	char	*s;
 
-	size = ft_strlen(src) + 1;
-	copy = (char *)malloc(size);
-	if (copy != 0)
+	d = (char *)dst;
+	s = (char *)src;
+	if (dst == src)
+		return (dst);
+	if (s < d)
 	{
-		ft_strlcpy(copy, src, size);
-		return (copy);
+		while (len--)
+			*(d + len) = *(s + len);
+		return (dst);
 	}
-	return (NULL);
+	while (len--)
+		*d++ = *s++;
+	return (dst);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len;
-	char	*res;
-	size_t	offset;
+	size_t	s1_len;
+	size_t	s2_len;
+	size_t	stot_len;
+	char	*rtn;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(len + 1);
-	if (res == NULL)
-		return (NULL);
-	offset = 0;
-	while (*s1)
-		res[offset++] = *s1++;
-	while (*s2)
-		res[offset++] = *s2++;
-	res[offset] = '\0';
-	return (res);
+	if (!s1 && !s2)
+		return (0);
+	s1_len = ft_strlen((char *)s1);
+	s2_len = ft_strlen((char *)s2);
+	stot_len = s1_len + s2_len + 1;
+	rtn = malloc(sizeof(char) * stot_len);
+	if (!rtn)
+		return (0);
+	ft_memmove(rtn, s1, s1_len);
+	ft_memmove(rtn + s1_len, s2, s2_len);
+	rtn[stot_len - 1] = '\0';
+	free((char *)s1);
+	return (rtn);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	ft_verific_newline(char *str)
 {
-	unsigned char	conv_c;
+	int	i;
 
-	conv_c = (unsigned char)c;
-	while (*s)
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
 	{
-		if (*s == conv_c)
-			return ((char *)s);
-		s++;
+		if (str[i] == '\n')
+			return (1);
+		i++;
 	}
-	if (conv_c == *s)
-		return ((char *)s);
-	return (NULL);
+	return (0);
 }
 
-char	*linedup(char *save, size_t end)
+char	*ft_verific_buff(int fd, char **line)
 {
-	char	*dup;
-	size_t	offset;
+	char	*buff;
 
-	dup = malloc(end + 1);
-	if (dup == NULL)
+	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (NULL);
-	offset = 0;
-	while (offset < end)
-	{
-		dup[offset] = save[offset];
-		offset++;
-	}
-	dup[offset] = '\0';
-	return (dup);
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buff)
+		return (NULL);
+	return (buff);
 }

@@ -1,83 +1,80 @@
 #include "get_next_line.h"
 
-static void	kill(char **save)
+
+char	*ft_save_the_next(char *s)
 {
-	if (*save != NULL)
+	int		i;
+	int		count;
+	char	*str;
+
+	i = 0;
+	count = 0;
+	while (s[i] && s[i] != '\n')
+		i++;
+	if (!s[i])
 	{
-		free(*save);
-		*save = NULL;
+		free(s);
+		return (0);
 	}
+	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!str)
+		return (0);
+	i++;
+	while (s[i])
+		str[count++] = s[i++];
+	str[count] = '\0';
+	free(s);
+	return (str);
 }
 
-static int	linelen(char *line)
+char	*ft_line(char *s)
 {
-	size_t	len;
+	int		i;
+	char	*str;
 
-	len = 0;
-	while (line[len])
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] && s[i] != '\n')
+		i++;
+	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (0);
+	i = 0;
+	while (s[i] && s[i] != '\n')
 	{
-		if (line[len] == '\n')
-			break ;
-		len++;
+		str[i] = s[i];
+		i++;
 	}
-	return (len);
-}
-
-static t_status	get_line(char **save, char **line)
-{
-	size_t	size;
-	char	*temp;
-
-	size = linelen(*save);
-	if ((*save)[size] == '\0')
-	{
-		*line = ft_strdup(*save);
-		kill(save);
-		return (END_OF_FILE);
-	}
-	*line = linedup(*save, size);
-	temp = ft_strdup((*save) + size + 1);
-	free(*save);
-	*save = temp;
-	return (NEWLINE);
-}
-
-static t_status	output(char **save, char **line, ssize_t size_read)
-{
-	if (size_read == -1)
-		return (ERROR);
-	else if (size_read == 0 && *save == NULL)
-	{
-		*line = ft_strdup("");
-		return (END_OF_FILE);
-	}
-	return (get_line(save, line));
+	str[i] = '\0';
+	return (str);
 }
 
 int	get_next_line(int fd, char **line)
 {
+	char		*buff;
 	static char	*save;
-	ssize_t		size_read;
-	char		*buffer;
-	char		*temp;
+	int			count;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	size_read = read(fd, buffer, BUFFER_SIZE);
-	while (size_read > 0)
+	buff = ft_verific_buff(fd, line);
+	if (!buff)
+		return (-1);
+	count = 1;
+	while (ft_verific_newline(save) != 1 && count != 0)
 	{
-		buffer[size_read] = '\0';
-		if (save == NULL)
-			save = ft_strdup(buffer);
-		else
+		count = read(fd, buff, BUFFER_SIZE);
+		if (count == -1)
 		{
-			temp = ft_strjoin(save, buffer);
-			free(save);
-			save = temp;
+			free(buff);
+			return (-1);
 		}
-		if (ft_strchr(save, '\n'))
-			break ;
-		size_read = read(fd, buffer, BUFFER_SIZE);
+		buff[count] = '\0';
+		save = ft_strjoin(save, buff);
 	}
-	free(buffer);
-	return (output(&save, line, size_read));
+	free(buff);
+	*line = ft_line(save);
+	save = ft_save_the_next(save);
+	if (count == 0)
+		return (0);
+	return (1);
 }
