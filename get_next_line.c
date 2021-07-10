@@ -6,16 +6,17 @@ char	*strings_line(char *s)
 	char	*str;
 
 	i = 0;
-	if (!s)
-		return (0);
 	str = malloc(sizeof(char) * (i + 1));
+	if (!s || !str)
+		return (0);
+	while (s[i] && s[i] != '\n')
+		i++;
+	i = 0;
 	while (s[i] && s[i] != '\n')
 	{
 		str[i] = s[i];
 		i++;
 	}
-	if (!str)
-		return (0);
 	str[i] = '\0';
 	return (str);
 }
