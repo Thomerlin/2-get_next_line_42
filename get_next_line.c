@@ -1,23 +1,25 @@
 #include "get_next_line.h"
 
-char	*get_line(char *s)
+char	*strings_line(char *s)
 {
+	int		i;
 	char	*str;
 
+	i = 0;
 	if (!s)
 		return (0);
-	while (*s && *s != '\n')
-		*s++;
-	str = malloc(sizeof(char) * (*str + 1));
+	while (s[i] && s[i] != '\n')
+		i++;
+	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (0);
-	while (*s && *s != '\n')
+	i = 0;
+	while (s[i] && s[i] != '\n')
 	{
-		*str = *s;
-		*s++;
-		*str++;
+		str[i] = s[i];
+		i++;
 	}
-	*str = '\0';
+	str[i] = '\0';
 	return (str);
 }
 
@@ -97,7 +99,7 @@ int	get_next_line(int fd, char **line)
 		save = ft_strjoin(save, buff);
 	}
 	free(buff);
-	*line = get_line(save);
+	*line = strings_line(save);
 	save = save_next(save);
 	if (counter == 0)
 		return (0);
