@@ -15,7 +15,7 @@ char	*get_line(char *s)
 	{
 		*str = *s;
 		*s++;
-		*str++
+		*str++;
 	}
 	*str = '\0';
 	return (str);
