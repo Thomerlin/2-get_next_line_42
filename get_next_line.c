@@ -1,6 +1,6 @@
 #include "get_next_line.h"
 
-char	*line(char *s)
+char	*strings_line(char *s)
 {
 	int		i;
 	char	*str;
@@ -96,7 +96,7 @@ int	get_next_line(int fd, char **line)
 		save = ft_strjoin(save, buff);
 	}
 	free(buff);
-	*line = line(save);
+	*line = strings_line(save);
 	save = save_next(save);
 	if (counter == 0)
 		return (0);
