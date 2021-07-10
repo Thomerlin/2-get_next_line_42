@@ -1,14 +1,33 @@
 #include "get_next_line.h"
 
-
-char	*ft_save_the_next(char *s)
+char	*line(char *s)
 {
 	int		i;
-	int		count;
 	char	*str;
 
 	i = 0;
-	count = 0;
+	if (!s)
+		return (0);
+	str = malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (0);
+	while (s[i] && s[i] != '\n')
+	{
+		str[i] = s[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	*save_next(char *s)
+{
+	int		i;
+	int		counter;
+	char	*str;
+
+	i = 0;
+	counter = 0;
 	while (s[i] && s[i] != '\n')
 		i++;
 	if (!s[i])
@@ -21,60 +40,65 @@ char	*ft_save_the_next(char *s)
 		return (0);
 	i++;
 	while (s[i])
-		str[count++] = s[i++];
-	str[count] = '\0';
+		str[counter++] = s[i++];
+	str[counter] = '\0';
 	free(s);
 	return (str);
 }
 
-char	*ft_line(char *s)
+char	*check_buff(int fd, char **line)
 {
-	int		i;
-	char	*str;
+	char	*buff;
+
+	if (fd < 0 || !line || BUFFER_SIZE <= 0)
+		return (NULL);
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buff)
+		return (NULL);
+	return (buff);
+}
+
+int	check_newline(char *str)
+{
+	int	i;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] && s[i] != '\n')
-		i++;
-	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (0);
-	i = 0;
-	while (s[i] && s[i] != '\n')
+	while (str[i])
 	{
-		str[i] = s[i];
+		if (str[i] == '\n')
+			return (1);
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	return (0);
 }
 
 int	get_next_line(int fd, char **line)
 {
 	char		*buff;
 	static char	*save;
-	int			count;
+	int			counter;
 
-	buff = ft_verific_buff(fd, line);
+	buff = check_buff(fd, line);
 	if (!buff)
 		return (-1);
-	count = 1;
-	while (ft_verific_newline(save) != 1 && count != 0)
+	counter = 1;
+	while (check_newline(save) != 1 && counter != 0)
 	{
-		count = read(fd, buff, BUFFER_SIZE);
-		if (count == -1)
+		counter = read(fd, buff, BUFFER_SIZE);
+		if (counter == -1)
 		{
 			free(buff);
 			return (-1);
 		}
-		buff[count] = '\0';
+		buff[counter] = '\0';
 		save = ft_strjoin(save, buff);
 	}
 	free(buff);
-	*line = ft_line(save);
-	save = ft_save_the_next(save);
-	if (count == 0)
+	*line = line(save);
+	save = save_next(save);
+	if (counter == 0)
 		return (0);
 	return (1);
 }
