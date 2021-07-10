@@ -25,9 +25,9 @@ char	*strings_line(char *s)
 
 char	*save_next(char *s)
 {
+	char	*str;
 	int		i;
 	int		counter;
-	char	*str;
 
 	i = 0;
 	counter = 0;
@@ -41,8 +41,7 @@ char	*save_next(char *s)
 	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!str)
 		return (0);
-	i++;
-	while (s[i])
+	while (s[++i])
 		str[counter++] = s[i++];
 	str[counter] = '\0';
 	free(s);
