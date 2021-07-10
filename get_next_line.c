@@ -11,11 +11,11 @@ char	*get_line(char *s)
 	str = malloc(sizeof(char) * (*str + 1));
 	if (!str)
 		return (0);
-	i = 0;
 	while (*s && *s != '\n')
 	{
-		*str++ = *s;
+		*str = *s;
 		*s++;
+		*str++
 	}
 	*str = '\0';
 	return (str);
