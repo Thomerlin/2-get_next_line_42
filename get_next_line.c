@@ -8,8 +8,7 @@ char	*strings_line(char *s)
 	i = 0;
 	if (!s)
 		return (0);
-	while (s[i] && s[i] != '\n')
-		i++;
+	
 	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (0);
