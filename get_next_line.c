@@ -63,7 +63,7 @@ char	*check_buff(int fd, char **line)
 
 char	*check_newline(char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	if (!s)
@@ -87,7 +87,7 @@ int	get_next_line(int fd, char **line)
 	if (!buff)
 		return (-1);
 	counter = 1;
-	while (counter != 0 && check_newline(save) != 1)
+	while (check_newline(save) != 1 && counter != 0)
 	{
 		counter = read(fd, buff, BUFFER_SIZE);
 		if (counter == -1)
