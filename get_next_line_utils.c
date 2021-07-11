@@ -2,58 +2,56 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	counter;
 
-	i = 0;
+	counter = 0;
 	if (!s)
 		return (0);
-	while (s[i] != '\0')
+	while (s[i])
 		i++;
 	return (i);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t length)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	unsigned char		*dst;
-	unsigned const char	*source;
-	size_t				i;
+	char	*dest;
+	char	*source;
+	int		i;
 
-	dst = (unsigned char *)dest;
-	source = (unsigned const char *)src;
 	i = 0;
-	if (!source && !dst)
-		return (NULL);
-	if (source < dst)
-		while ((int)(--length) >= 0)
-			dst[length] = source[length];
-	else
+	dest = (char *)dst;
+	source = (char *)src;
+	if (src == dst)
+		return (dst);
+	if (source < dest)
 	{
-		while (i < length)
-		{
-			dst[i] = source[i];
-			i++;
-		}
+		while (len--)
+			*(dest + len) = *(source + len);
+		return (dst);
 	}
-	return (dest);
+	while (len--)
+		*dest++ = *source++;
+	return (dst);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len;
-	size_t	i;
-	char	*result;
+	size_t	len_s1;
+	size_t	len_s2;
+	size_t	lens_total;
+	char	*ret;
 
-	if (s1 == NULL || s2 == NULL)
+	if (!s1 && !s2)
 		return (0);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	result = malloc(len + 1);
-	if (result == NULL)
+	len_s1 = ft_strlen((char *)s1);
+	len_s2 = ft_strlen((char *)s2);
+	lens_total = len_s1 + len_s2 + 1;
+	ret = malloc(sizeof(char) * lens_total);
+	if (!ret)
 		return (0);
-	i = 0;
-	while (*s1)
-		result[i++] = *s1++;
-	while (*s2)
-		result[i++] = *s2++;
-	result[i] = '\0';
-	return (result);
+	ft_memmove(ret, s1, len_s1);
+	ft_memmove(ret + len_s1, s2, len_s2);
+	ret[lens_total - 1] = '\0';
+	free((char *)s1);
+	return (ret);
 }
