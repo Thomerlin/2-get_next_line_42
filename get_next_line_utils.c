@@ -44,11 +44,11 @@ char	*ft_strjoin(const char *s1, const char *s2)
 	char	*result;
 
 	if (s1 == NULL || s2 == NULL)
-		return (NULL);
+		return (0);
 	len = ft_strlen(s1) + ft_strlen(s2);
 	result = malloc(len + 1);
 	if (result == NULL)
-		return (NULL);
+		return (0);
 	i = 0;
 	while (*s1)
 		result[i++] = *s1++;
