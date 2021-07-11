@@ -61,7 +61,7 @@ char	*check_buff(int fd, char **line)
 	return (buff);
 }
 
-char	*check_newline(char *s)
+char	check_newline(char *s)
 {
 	int	i;
 
