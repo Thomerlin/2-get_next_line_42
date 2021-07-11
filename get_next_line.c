@@ -2,24 +2,22 @@
 
 char	*strings_line(char *s)
 {
-	int		i;
 	char	*str;
 
-	i = 0;
 	if (!s)
 		return (0);
-	while (s[i] && s[i] != '\n')
-		i++;
-	str = malloc(sizeof(char) * (i + 1));
+	while (*s != '\n' && *s != '\0')
+		*s++;
+	str = malloc(sizeof(char) * (*str + 1));
 	if (!str)
 		return (0);
-	i = 0;
-	while (s[i] && s[i] != '\n')
+	*s = 0;
+	while (*s != '\n' && *s != '\0')
 	{
-		str[i] = s[i];
-		i++;
+		*str = *s;
+		*str++;
 	}
-	str[i] = '\0';
+	*str = '\0';
 	return (str);
 }
 
