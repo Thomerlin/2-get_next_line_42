@@ -51,11 +51,11 @@ char	*save_next(char *s)
 
 char	*check_buff(int fd, char **line)
 {
-	char	buff;
+	char	*buff;
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (NULL);
-	buff = malloc(sizeof(char) * BUFFER_SIZE + 1));
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buff)
 		return (NULL);
 	return (buff);
@@ -81,7 +81,7 @@ int	get_next_line(int fd, char **line)
 {
 	static char	*save;
 	char		*buff;
-	size_t		counter;
+	int			counter;
 
 	buff = check_buff(fd, line);
 	if (!buff)
