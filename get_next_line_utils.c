@@ -7,9 +7,9 @@ size_t	ft_strlen(const char *s)
 	counter = 0;
 	if (!s)
 		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	while (s[counter])
+		counter++;
+	return (counter);
 }
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
