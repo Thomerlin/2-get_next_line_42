@@ -2,49 +2,50 @@
 
 char	*strings_line(char *s)
 {
+	int		i;
 	char	*str;
 
+	i = 0;
 	if (!s)
 		return (0);
-	while (*s != '\n' && *s != '\0')
-		*s++;
-	str = malloc(sizeof(char) * (*str + 1));
+	while (s[i] != '\n' && s[i] != '\0')
+		i++;
+	str = malloc(sizeof(char) * (i + 1));
 	if (!str)
 		return (0);
-	*s = 0;
-	while (*s != '\n' && *s != '\0')
+	i = 0;
+	while (s[i] != '\n' && s[i] != '\0')
 	{
-		*str = *s;
-		*str++;
+		str[i] = s[i];
+		i++;
 	}
-	*str = '\0';
+	str[i] = '\0';
 	return (str);
 }
 
-char	*save_next(char *s)
+char	save_next(char *s)
 {
-	int		i;
-	int		counter;
+	size_t	i;
+	size_t	counter;
 	char	*str;
 
 	i = 0;
 	counter = 0;
-	while (s[i] && s[i] != '\n')
+	while (s[i] != '\n' && s[i] != '\0')
 		i++;
 	if (!s[i])
 	{
 		free(s);
 		return (0);
 	}
-	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
+	str = malloc(sizeof(char) * (ft_strlen(s) +1));
 	if (!str)
 		return (0);
-	i++;
-	while (s[i])
+	while (s[++i])
 		str[counter++] = s[i++];
 	str[counter] = '\0';
 	free(s);
-	return (str);
+	return (str);	
 }
 
 char	*check_buff(int fd, char **line)
