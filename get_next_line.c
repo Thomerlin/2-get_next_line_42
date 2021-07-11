@@ -2,7 +2,7 @@
 
 char	*strings_line(char *s)
 {
-	int		i;
+	size_t	i;
 	char	*str;
 
 	i = 0;
@@ -38,7 +38,7 @@ char	*save_next(char *s)
 		free(s);
 		return (0);
 	}
-	str = malloc(sizeof(char) * (ft_strlen(s) +1));
+	str = malloc(sizeof(char) * (ft_strlen(s) + 1));
 	if (!str)
 		return (0);
 	i++;
@@ -46,31 +46,31 @@ char	*save_next(char *s)
 		str[counter++] = s[i++];
 	str[counter] = '\0';
 	free(s);
-	return (str);	
+	return (str);
 }
 
 char	*check_buff(int fd, char **line)
 {
-	char	*buff;
+	char	buff;
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (NULL);
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buff = malloc(sizeof(char) * BUFFER_SIZE + 1));
 	if (!buff)
 		return (NULL);
 	return (buff);
 }
 
-int	check_newline(char *str)
+char	*check_newline(char *s)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	if (!str)
+	if (!s)
 		return (0);
-	while (str[i])
+	while (s[i])
 	{
-		if (str[i] == '\n')
+		if (s[i] == '\n')
 			return (1);
 		i++;
 	}
@@ -79,15 +79,15 @@ int	check_newline(char *str)
 
 int	get_next_line(int fd, char **line)
 {
-	char		*buff;
 	static char	*save;
-	int			counter;
+	char		*buff;
+	size_t		counter;
 
 	buff = check_buff(fd, line);
 	if (!buff)
 		return (-1);
 	counter = 1;
-	while (check_newline(save) != 1 && counter != 0)
+	while (counter != 0 && check_newline(save) != 1)
 	{
 		counter = read(fd, buff, BUFFER_SIZE);
 		if (counter == -1)
