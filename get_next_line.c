@@ -41,7 +41,8 @@ char	*save_next(char *s)
 	str = malloc(sizeof(char) * (ft_strlen(s) +1));
 	if (!str)
 		return (0);
-	while (s[i++])
+	i++;
+	while (s[i])
 		str[counter++] = s[i++];
 	str[counter] = '\0';
 	free(s);
