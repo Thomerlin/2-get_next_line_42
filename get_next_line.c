@@ -23,7 +23,7 @@ char	*strings_line(char *s)
 	return (str);
 }
 
-char	save_next(char *s)
+char	*save_next(char *s)
 {
 	size_t	i;
 	size_t	counter;
