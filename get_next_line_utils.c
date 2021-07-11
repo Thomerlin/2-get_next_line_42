@@ -2,36 +2,37 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	counter;
+	size_t	i;
 
-	counter = 0;
-	if (!s)
-		return (0);
+	i = 0;
 	while (s[i])
 		i++;
 	return (i);
 }
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+void	*ft_memmove(void *dest, const void *src, size_t length)
 {
-	char	*source;
-	char	*dest;
-	int		i;
+	unsigned char		*dst;
+	unsigned const char	*source;
+	size_t				i;
 
+	dst = (unsigned char *)dest;
+	source = (unsigned const char *)src;
 	i = 0;
-	source = (unsigned char *)src;
-	dest = (unsigned char *)dst;
-	if (src == dst)
-		return (dst);
-	if (source < dest)
+	if (!source && !dst)
+		return (NULL);
+	if (source < dst)
+		while ((int)(--length) >= 0)
+			dst[length] = source[length];
+	else
 	{
-		while (len--)
-			(dest[i] + len) = (source[i] + len);
-		return (dst);
+		while (i < length)
+		{
+			dst[i] = source[i];
+			i++;
+		}
 	}
-	while (len--)
-		dest[i++] = source[i++];
-	return (dst);
+	return (dest);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
