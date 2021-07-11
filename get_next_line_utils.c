@@ -2,54 +2,56 @@
 
 size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	counter;
 
-	i = 0;
+	counter = 0;
 	if (!s)
 		return (0);
-	while (s[i] != '\0')
+	while (s[i])
 		i++;
 	return (i);
 }
 
 void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*d;
-	char	*s;
+	char	*source;
+	char	*dest;
+	int		i;
 
-	d = (char *)dst;
-	s = (char *)src;
-	if (dst == src)
+	i = 0;
+	source = (unsigned char *)src;
+	dest = (unsigned char *)dst;
+	if (src == dst)
 		return (dst);
-	if (s < d)
+	if (source < dest)
 	{
 		while (len--)
-			*(d + len) = *(s + len);
+			(dest[i] + len) = (source[i] + len);
 		return (dst);
 	}
 	while (len--)
-		*d++ = *s++;
+		dest[i++] = source[i++];
 	return (dst);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len_str1;
-	size_t	len_str2;
-	size_t	stot_len;
+	size_t	len_s1;
+	size_t	len_s2;
+	size_t	lens_total;
 	char	*ret;
 
 	if (!s1 && !s2)
 		return (0);
-	len_str1 = ft_strlen((char *)s1);
-	len_str2 = ft_strlen((char *)s2);
-	stot_len = len_str1 + len_str2 + 1;
-	ret = malloc(sizeof(char) * stot_len);
+	len_s1 = ft_strlen((char *)s1);
+	len_s2 = ft_strlen((char *)s2);
+	lens_total = len_s1 + len_s2 + 1;
+	ret = malloc(sizeof(char) * lens_total);
 	if (!ret)
 		return (0);
-	ft_memmove(ret, s1, len_str1);
-	ft_memmove(ret + len_str1, s2, len_str2);
-	ret[stot_len - 1] = '\0';
+	ft_memmove(ret, s1, len_s1);
+	ft_memmove(ret + len_s1, s2, len_s2);
+	ret[lens_total - 1] = '\0';
 	free((char *)s1);
 	return (ret);
 }
