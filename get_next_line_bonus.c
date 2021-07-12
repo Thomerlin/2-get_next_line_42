@@ -55,7 +55,7 @@ char	*check_buff(int fd, char **line)
 
 	if (fd < 0 || !line || BUFFER_SIZE <= 0)
 		return (NULL);
-    if (fd >= OPEN_MAX)
+    if (fd >= MAX)
 		return (NULL);
 	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buff)
