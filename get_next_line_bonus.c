@@ -66,7 +66,7 @@ char	*check_buff(int fd, char **line)
 int	check_newline(char *str)
 {
 	int	i;
-
+ 
 	i = 0;
 	if (!str)
 		return (0);

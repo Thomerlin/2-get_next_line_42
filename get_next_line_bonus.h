@@ -11,4 +11,4 @@ size_t	ft_strlen(const char *s);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 
-#endif
+#endif 
