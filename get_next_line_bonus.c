@@ -82,7 +82,7 @@ int	check_newline(char *str)
 int	get_next_line(int fd, char **line)
 {
 	char		*buff;
-	static char	*save[OPEN_MAX];
+	static char	*save[MAX];
 	int			counter;
 
 	buff = check_buff(fd, line);
